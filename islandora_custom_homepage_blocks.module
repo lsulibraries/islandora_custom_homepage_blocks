@@ -5,15 +5,23 @@ function markup($namespace_list) {
     $markup = '<div class="homepageSection">
     <div class="homepageText">';
     foreach ($namespace_list as $namespace) {
-      $prefix = $namespace['prefix']
-      $prefix_class = $prefix . 'Link'
-      $markup .= "<a class='institutionLink $prefix_class";
-      $markup .= " href=/$prefix>";
-      $title = $namespace['title'];
-      $markup .= "<div class=institutionLink_meta>$title</div></a>"
+      $prefix = $namespace;
+      $prefix_class = $prefix . 'Link';
+      $markup .= "<a class='institutionLink $prefix_class'";
+      $markup .= " href='/$prefix'>";
+      $request = db_select('islandora_namespace_homepage','nshome')
+      ->fields('nshome',array('prefix','title'))
+      ->condition('prefix',$prefix)
+      ->execute();
+      $requests = $request->fetchAll();
+      $title = $requests ? '' : $prefix ;
+      foreach ($requests as $result){
+        $title = $result->title;
+      }
+      $markup .= "<div class='institutionLink_meta'>$title</div>";
+      $markup .= "</a></div></div>";
     }
-    dpm($markup);
-    return $markup;
+    return array('#markup' => $markup);
   }
   else{
     return '';
@@ -22,17 +30,32 @@ function markup($namespace_list) {
 
 function generate_markup() {
   if (module_exists('islandora_namespace_homepage')) {
+
     $list = get_namespace_prefixes(FALSE);
     $markup = markup($list);
   }
-
+  return $markup;
 }
 
 function islandora_custom_homepage_blocks_block_info() {
+  $blocks = array();
   $blocks['homepage_institution_list'] = array(
-    'info' => t('Homepage Institution List'),
-    'title' => t('Homepage Institution List'),
-    'description' => t('Homepage Institution List'),
-    '#markup' => generate_markup();
+    'info' => t('Homepage Custom Block Institution List'),
+    'pages' => '<front>',
+    'status' => TRUE,
+    'region' => 'content',
+    'visibility' => BLOCK_VISIBILITY_LISTED,
   );
+  return $blocks;
+}
+
+function islandora_custom_homepage_blocks_block_view($delta = '') {
+  switch ($delta) {
+    case ('homepage_institution_list') :
+       $block['content'] = generate_markup();
+
+
+    break;
+  }
+  return $block;
 }
