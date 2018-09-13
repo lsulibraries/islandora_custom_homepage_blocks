@@ -1,5 +1,38 @@
 <?php
 
+function markup($namespace_list) {
+  if($namespace_list){
+    $markup = '<div class="homepageSection">
+    <div class="homepageText">';
+    foreach ($namespace_list as $namespace) {
+      $prefix = $namespace['prefix']
+      $prefix_class = $prefix . 'Link'
+      $markup .= "<a class='institutionLink $prefix_class";
+      $markup .= " href=/$prefix>";
+      $title = $namespace['title'];
+      $markup .= "<div class=institutionLink_meta>$title</div></a>"
+    }
+    dpm($markup);
+    return $markup;
+  }
+  else{
+    return '';
+  }
+}
+
+function generate_markup() {
+  if (module_exists('islandora_namespace_homepage')) {
+    $list = get_namespace_prefixes(FALSE);
+    $markup = markup($list);
+  }
+
+}
+
 function islandora_custom_homepage_blocks_block_info() {
-  dpm($blocks);
+  $blocks['homepage_institution_list'] = array(
+    'info' => t('Homepage Institution List'),
+    'title' => t('Homepage Institution List'),
+    'description' => t('Homepage Institution List'),
+    '#markup' => generate_markup();
+  );
 }
