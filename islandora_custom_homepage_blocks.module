@@ -1,0 +1,5 @@
+<?php
+
+function islandora_custom_homepage_blocks_block_info() {
+  dpm($blocks);
+}
