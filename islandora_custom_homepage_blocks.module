@@ -30,7 +30,6 @@ function markup($namespace_list) {
 
 function generate_markup() {
   if (module_exists('islandora_namespace_homepage')) {
-
     $list = get_namespace_prefixes(FALSE);
     $markup = markup($list);
   }
@@ -41,10 +40,10 @@ function islandora_custom_homepage_blocks_block_info() {
   $blocks = array();
   $blocks['homepage_institution_list'] = array(
     'info' => t('Homepage Custom Block Institution List'),
-    'pages' => '<front>',
     'status' => TRUE,
     'region' => 'content',
     'visibility' => BLOCK_VISIBILITY_LISTED,
+    'pages' => '<front>',
   );
   return $blocks;
 }
@@ -53,8 +52,10 @@ function islandora_custom_homepage_blocks_block_view($delta = '') {
   switch ($delta) {
     case ('homepage_institution_list') :
        $block['content'] = generate_markup();
-
-
+       $block['visibility'] = BLOCK_VISIBILITY_LISTED;
+       $block['pages'] = '<front>';
+       $block['region'] = 'content';
+       $block['title'] = '<none>';
     break;
   }
   return $block;
