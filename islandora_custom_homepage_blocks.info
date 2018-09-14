@@ -2,3 +2,4 @@ name = islandora custom homepage blocks
 description = block info and text setting for custom homepage.
 core = 7.x
 dependencies[] = islandora
+dependencies[] = islandora_namespace_homepage
