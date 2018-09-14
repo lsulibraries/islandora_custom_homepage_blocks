@@ -13,7 +13,7 @@ function markup($namespace_list) {
       $markup .= "<div><a  class='institutionLink $prefix_class' href='/$prefix'>";
       $title = get_field_or_default('title', $record, $namespace);
       // $image = get_field_or_default('logo', $record, $namespace);
-      $color = isset($record->color)? $record->color : '#ffffff';
+      $color = isset($record->color) && strlen($record->color) > 0? $record->color : '#ffffff';
       $markup .= "<img src='$fp_logo' style='background-color:$color'><div class='institutionLink_meta'>$title</div></img></a></div>";
     }
     $markup .= "</div></div>";
