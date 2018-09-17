@@ -10,11 +10,11 @@ function markup($namespace_list) {
       $record = get_record($namespace);
       $logo = file_or_default($record,'logo','/sites/all/themes/ldl/images/NpfYQT0.png');
       $fp_logo = file_or_default($record,'fp_logo','/sites/all/themes/ldl/images/NpfYQT0.png');
-      $markup .= "<div><a  class='institutionLink $prefix_class' href='/$prefix'>";
+      $markup .= "<a  class='institutionLink $prefix_class' href='/$prefix'>";
       $title = get_field_or_default('title', $record, $namespace);
       // $image = get_field_or_default('logo', $record, $namespace);
       $color = get_field_or_default('color', $record, $namespace);
-      $markup .= "<img src='$fp_logo' style='background-color:$color'><div class='institutionLink_meta'>$title</div></img></a></div>";
+      $markup .= "<img src='$fp_logo' style='background-color:$color'><div class='institutionLink_meta'>$title</div></img></a>";
     }
     $markup .= "</div></div>";
     return array('#markup' => $markup);
@@ -47,6 +47,7 @@ function islandora_custom_homepage_blocks_block_info() {
     'info' => t('Homepage Custom Block Institution List'),
     'status' => TRUE,
     'region' => 'content',
+    'weight' => 1,
     'visibility' => BLOCK_VISIBILITY_LISTED,
     'pages' => '<front>',
   );
@@ -56,6 +57,7 @@ function islandora_custom_homepage_blocks_block_info() {
 function islandora_custom_homepage_blocks_block_view($delta = '') {
   switch ($delta) {
     case ('homepage_institution_list') :
+       $block['weight'] = 1;
        $block['content'] = generate_markup();
        $block['visibility'] = BLOCK_VISIBILITY_LISTED;
        $block['pages'] = '<front>';
